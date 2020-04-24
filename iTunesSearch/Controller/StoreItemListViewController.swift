@@ -40,7 +40,7 @@ class StoreItemListViewController: UIViewController {
             for i in 0..<dictionary[favoritesString]!.count {
                 let item = dictionary[favoritesString]![i]
                 let favoritesSectionIndex = kinds.count-1
-                NetworkServices.shared.updateImage(storeItem: item) { (image) in
+                NetworkServices.shared.updateImage(storeItem: item) { (image, errorMessage) in
                     if let image = image {
                         DispatchQueue.main.async {
                             self.dictionary[self.favoritesString]![i].setImage(image)
@@ -49,6 +49,7 @@ class StoreItemListViewController: UIViewController {
                         }
                         
                     } else {
+                        self.showErrorMessage(text: errorMessage)
                     }
                     
                 }
