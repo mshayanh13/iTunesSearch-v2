@@ -105,7 +105,6 @@ struct StoreItem: Codable, Equatable, CustomStringConvertible {
     }
     
     static func == (lhs: Self, rhs: Self) -> Bool {
-        debugPrint("MSH: StoreItem ==")
         return lhs.collectionId == rhs.collectionId && lhs.trackId == rhs.trackId
     }
     

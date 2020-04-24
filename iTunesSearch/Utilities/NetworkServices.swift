@@ -11,13 +11,12 @@ import UIKit
 struct NetworkServices {
     static let shared = NetworkServices()
     
-    func fetchItems(matching query: [String: String], completion: @escaping ([StoreItem]?) -> Void) {
+    func fetchItems(matching query: [String: String], completion: @escaping ([StoreItem]?, String?) -> Void) {
         
         let baseURL = URL(string: "https://itunes.apple.com/search?")!
         
         guard let url = baseURL.withQueries(query) else {
-            completion(nil)
-            print("url query issues")
+            completion(nil, "url query issues")
             return
         }
 
@@ -26,11 +25,10 @@ struct NetworkServices {
             let jsonDecoder = JSONDecoder()
             if let data = data, let storeItems = try? jsonDecoder.decode(StoreItems.self, from: data) {
                 
-                completion(storeItems.results)
+                completion(storeItems.results, nil)
                 
             } else {
-                print("Either no data was returned, or data was not serialized")
-                completion(nil)
+                completion(nil, "Either no data was returned, or data was not serialized")
                 return
             }
         }
@@ -38,16 +36,15 @@ struct NetworkServices {
         
     }
     
-    func updateImage(storeItem: StoreItem, completion: @escaping (UIImage?) -> Void ) {
+    func updateImage(storeItem: StoreItem, completion: @escaping (UIImage?, String?) -> Void ) {
         
         let url = storeItem.artworkUrl
         let session = URLSession.shared
         let dataTask = session.dataTask(with: url) { (data, response, error) in
             if let data = data, let image = UIImage(data: data) {
-                completion(image)
+                completion(image, nil)
             } else {
-                print("error")
-                completion(nil)
+                completion(nil, error.debugDescription)
                 return
             }
         }

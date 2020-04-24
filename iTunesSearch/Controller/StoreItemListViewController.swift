@@ -14,23 +14,9 @@ class StoreItemListViewController: UIViewController {
     @IBOutlet weak var tableView: UITableView!
     
     var originalSearchResults = [StoreItem]()
-    var dictionary = [String: [StoreItem]]() {
-        didSet {
-            print("MSH: \(dictionary)")
-        }
-    }
-    var kinds = [String]() {
-        didSet {
-            print("MSH: \(kinds)")
-        }
-    }
-    
-    var favorites = [StoreItem]() {
-        didSet {
-            print("MSH: \(favorites)")
-        }
-    }
-    
+    var dictionary = [String: [StoreItem]]()
+    var kinds = [String]()
+    var favorites = [StoreItem]()
     let favoritesString = Constants.favorites.rawValue
     
     override func viewDidLoad() {
@@ -45,7 +31,6 @@ class StoreItemListViewController: UIViewController {
     }
     
     func getFavorites() {
-        print("MSH: getFavorites")
         let propertyListDecoder = PropertyListDecoder()
         if let retrievedFavoritesData = try? Data(contentsOf: FileService.shared.archiveURL), let decodedFavorites = try? propertyListDecoder.decode(Array<StoreItem>.self, from: retrievedFavoritesData) {
             
@@ -64,7 +49,6 @@ class StoreItemListViewController: UIViewController {
                         }
                         
                     } else {
-                        debugPrint("MSH: error")
                     }
                     
                 }
@@ -74,7 +58,6 @@ class StoreItemListViewController: UIViewController {
     }
     
     func saveFavorites() {
-        print("MSH: saveFavorites")
         if let favoritesArray = dictionary[favoritesString] {
             favorites = favoritesArray
             let propertyListEncoder = PropertyListEncoder()
@@ -159,9 +142,9 @@ class StoreItemListViewController: UIViewController {
                 "limit": "5"
             ]
             
-            NetworkServices.shared.fetchItems(matching: query) { (storeItems) in
+            NetworkServices.shared.fetchItems(matching: query) { (storeItems, errorMessage) in
                 guard let storeItems = storeItems else {
-                    debugPrint("MSH: error")
+                    self.showErrorMessage(text: errorMessage)
                     return
                 }
                 DispatchQueue.main.async {
@@ -185,7 +168,7 @@ class StoreItemListViewController: UIViewController {
                         for j in 0..<array.count {
                             let item = array[j]
                             let indexPath = IndexPath(row: j, section: i)
-                            NetworkServices.shared.updateImage(storeItem: item) { (image) in
+                            NetworkServices.shared.updateImage(storeItem: item) { (image, errorMessage) in
                                 if let image = image {
                                     DispatchQueue.main.async {
                                         self.dictionary[kind]![j].setImage(image)
@@ -194,7 +177,7 @@ class StoreItemListViewController: UIViewController {
                                     }
                                     
                                 } else {
-                                    debugPrint("MSH: error")
+                                    self.showErrorMessage(text: errorMessage)
                                 }
                                 
                             }

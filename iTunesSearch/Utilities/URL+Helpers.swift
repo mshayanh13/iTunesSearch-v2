@@ -6,7 +6,7 @@
 //  Copyright © 2020 Mohammad Shayan. All rights reserved.
 //
 
-import Foundation
+import UIKit
 
 extension URL {
     func withQueries(_ queries: [String: String]) -> URL? {
@@ -23,10 +23,11 @@ extension URL {
     }
 }
 
-extension Dictionary {
-    mutating func merge(dict: [Key: Value]){
-        for (k, v) in dict {
-            updateValue(v, forKey: k)
-        }
+extension UIViewController {
+    func showErrorMessage(text: String?) {
+        let message = text != nil ? text! : "Error"
+        let alert = UIAlertController(title: "Error", message: message, preferredStyle: UIAlertControllerStyle.alert)
+        alert.addAction(UIAlertAction(title: "Cancel", style: UIAlertActionStyle.cancel, handler: nil))
+        self.present(alert, animated: true, completion: nil)
     }
 }
