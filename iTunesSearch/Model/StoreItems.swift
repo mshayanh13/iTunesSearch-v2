@@ -24,7 +24,7 @@ struct StoreItem: Codable, Equatable, CustomStringConvertible {
     let genre: String
     let collectionId: Int
     let trackId: Int
-    private(set) public var artworkImage: UIImage
+    //private(set) public var artworkImage: UIImage
     private(set) public var isFavorite: Bool
     
     enum CodingKeys: String, CodingKey {
@@ -38,7 +38,7 @@ struct StoreItem: Codable, Equatable, CustomStringConvertible {
         case genre = "primaryGenreName"
         case collectionId
         case trackId
-        case artworkImage
+        //case artworkImage
         case isFavorite
     }
     
@@ -54,7 +54,7 @@ struct StoreItem: Codable, Equatable, CustomStringConvertible {
         self.genre = try valueContainer.decode(String.self, forKey: CodingKeys.genre)
         self.collectionId = try valueContainer.decode(Int.self, forKey: CodingKeys.collectionId)
         self.trackId = try valueContainer.decode(Int.self, forKey: CodingKeys.trackId)
-        self.artworkImage = UIImage(named: "gray")!
+        //self.artworkImage = UIImage(named: "gray")!
         do {
             try self.isFavorite = valueContainer.decode(Bool.self, forKey: CodingKeys.isFavorite)
         } catch {
@@ -73,7 +73,7 @@ struct StoreItem: Codable, Equatable, CustomStringConvertible {
         self.genre = storeItem.genre
         self.collectionId = storeItem.collectionId
         self.trackId = storeItem.trackId
-        self.artworkImage = storeItem.artworkImage
+        //self.artworkImage = storeItem.artworkImage
         self.isFavorite = storeItem.isFavorite
     }
     
@@ -93,7 +93,7 @@ struct StoreItem: Codable, Equatable, CustomStringConvertible {
     }
     
     mutating func setImage(_ image: UIImage) {
-        self.artworkImage = image
+        //self.artworkImage = image
     }
     
     mutating func changeFavorite() {

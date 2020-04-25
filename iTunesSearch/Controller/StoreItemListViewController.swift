@@ -37,24 +37,6 @@ class StoreItemListViewController: UIViewController {
             favorites = decodedFavorites
             dictionary[favoritesString] = favorites
             
-            for i in 0..<dictionary[favoritesString]!.count {
-                let item = dictionary[favoritesString]![i]
-                let favoritesSectionIndex = kinds.count-1
-                NetworkServices.shared.updateImage(storeItem: item) { (image, errorMessage) in
-                    if let image = image {
-                        DispatchQueue.main.async {
-                            self.dictionary[self.favoritesString]![i].setImage(image)
-                            
-                            self.tableView.reloadRows(at: [IndexPath(row: i, section: favoritesSectionIndex)], with: .automatic)
-                        }
-                        
-                    } else {
-                        self.showErrorMessage(text: errorMessage)
-                    }
-                    
-                }
-            }
-            
         }
     }
     
@@ -163,28 +145,6 @@ class StoreItemListViewController: UIViewController {
                     self.tableView.reloadData()
                     
                     
-                    for i in 0..<self.kinds.count {
-                        let kind = self.kinds[i]
-                        guard let array = self.dictionary[kind] else { return }
-                        for j in 0..<array.count {
-                            let item = array[j]
-                            let indexPath = IndexPath(row: j, section: i)
-                            NetworkServices.shared.updateImage(storeItem: item) { (image, errorMessage) in
-                                if let image = image {
-                                    DispatchQueue.main.async {
-                                        self.dictionary[kind]![j].setImage(image)
-                                        
-                                        self.tableView.reloadRows(at: [indexPath], with: .automatic)
-                                    }
-                                    
-                                } else {
-                                    self.showErrorMessage(text: errorMessage)
-                                }
-                                
-                            }
-                        }
-                        
-                    }
                 }
             }
         }

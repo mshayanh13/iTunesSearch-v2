@@ -28,20 +28,37 @@ class StoreItemCell: UITableViewCell {
     }
     
     func configureCellWith(_ storeItem: StoreItem) {
-        itemImage.image = storeItem.artworkImage
+        itemImage.image = UIImage(named: "gray")!
         nameLabel.text = storeItem.trackName
         genreLabel.text = storeItem.genre
         urlTextView.text = storeItem.trackUrl.absoluteString
         if storeItem.isFavorite {
+            print("MSH: button for: \(storeItem.trackName) should be red")
             favoriteButton.imageView?.image = UIImage(named: Constants.redHeart.rawValue)
         } else {
             favoriteButton.imageView?.image = UIImage(named: Constants.emptyHeart.rawValue)
         }
         favoriteButton.addTarget(self, action: #selector(heartButtonTapped(_:)), for: .touchUpInside)
+        updateImage(storeItem: storeItem)
     }
     
     @objc func heartButtonTapped(_ sender: UIButton) {
         buttonTapAction?()
+    }
+    
+    func updateImage(storeItem: StoreItem) {
+        NetworkServices.shared.updateImage(storeItem: storeItem) { (image, errorMessage) in
+            
+            if let image = image {
+                DispatchQueue.main.async {
+                    self.itemImage.image = image
+                    
+                }
+            } else {
+                print("MSH: \(errorMessage ?? "Error")")
+            }
+            
+        }
     }
 
 }
